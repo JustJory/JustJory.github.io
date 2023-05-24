@@ -1,0 +1,163 @@
+// Common date helper methods
+/**
+ * Takes localized string, either UK or US format, and converts
+ * to a Date() object.
+ *
+ * @param {string} localizedDate - Date in mm/dd/yy or dd/mm/yy format
+ * @return {Date}
+ */
+function sCommonDateFromLocalizedString(localizedDate) {
+  var dateFormatLanguage = sCommonGetDateFormat();
+  var dateStartsWithMonth = dateFormatLanguage === 'en';
+  var dateComponents = localizedDate.split('/');
+  var month = dateStartsWithMonth ? dateComponents[0] : dateComponents[1];
+  var day = dateStartsWithMonth ? dateComponents[1] : dateComponents[0];
+  var year = '20' + dateComponents[2]; // Add '20' for 20xx years, otherwise Date() will assume it's 19xx
+  return new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+}
+
+/**
+ * Gets a normalized date format language either: 'en-GB' or 'en'
+ *
+ * @returns {string}
+ */
+function sCommonGetDateFormat() {
+  var ukFormat = 'en-GB';
+  // backend / rest of SGY Core doesn't use standard date formatting, it's either 'en-GB' or 'US' format.
+  if (Drupal.settings.s_common.date_format_language === undefined || Drupal.settings.s_common.date_format_language !== ukFormat) {
+    return 'en';
+  }
+  return ukFormat;
+}
+
+/**
+ * Checks if date is within range
+ *
+ * @param {object} dateRange - json object with start/end dates of grading period dates
+ * @param {string} date - Current selected due date string in the format 'MM/DD/YY' or 'DD/MM/YY'
+ * @returns {boolean}
+ */
+function sCommonDateInRange(dateRange, date) {
+  if (dateRange === 'undefined' || dateRange == null) {
+    return false;
+  }
+  var startDate = new Date(dateRange['start']);
+  var endDate = new Date(dateRange['end']);
+  var dateValue = sCommonDateFromLocalizedString(date);
+  return dateValue >= startDate && dateValue <= endDate;
+}
+
+/**
+ * Helper to check if grade item form should show due date warning
+ *
+ * @param {object} gradeEnabledField - Checkbox for enabling/disabling grade
+ * @param {object} gradePeriodField - Grade period select field
+ * @param {object} dueDateField - Due date input field
+ * @return {boolean}
+ */
+function sCommonShouldShowDueDateWarning(gradeEnabledField, gradePeriodField, dueDateField) {
+  // If no grading period dates were passed up, then the form we're showing has no grading period (such as creating
+  // discussions within a group or school)
+  if (Drupal.settings.grading_period_dates === undefined) {
+    return false;
+  }
+
+  // If Grading is disabled, no need to validate due date
+  if (gradeEnabledField.val() !== undefined && !gradeEnabledField.is(':checked')) {
+    return false;
+  }
+
+  // If there's no grading period, don't show warning (there's no range)
+  var gradingPeriodId = parseInt(gradePeriodField.val());
+  if (gradingPeriodId === 0) {
+    return false;
+  }
+
+  var gradingPeriodDates = Drupal.settings.grading_period_dates[gradingPeriodId];
+  var showWarning = false;
+  // Iterate through each due date field (CSL has a due date for each section)
+  dueDateField.each(function () {
+    var val = $(this).val();
+    if (val !== "" && !sCommonDateInRange(gradingPeriodDates, val)) {
+      showWarning = true;
+
+      // Break the jquery each loop
+      return false;
+    }
+  });
+
+  return showWarning;
+}
+
+/**
+ * Helper to get translated and formated date string in either
+ * MMM DD, YYYY or DD MMM, YYYY
+ *
+ * @param {Date} date
+ * @return {string}
+ */
+function sCommonDateFormatToString(date) {
+  var dateOfMonth = date.getUTCDate();
+  var month = date.toLocaleDateString('en',
+    {
+      month: "long",
+      timeZone: 'UTC'
+    });
+  var monthTranslated = Drupal.date_t(month, 'month_abbr');
+  var year = date.getUTCFullYear();
+
+  if (sCommonGetDateFormat() === 'en-GB') {
+    return dateOfMonth + " " + monthTranslated + ", " + year;
+  }
+  return monthTranslated + " " + dateOfMonth + ", " + year;
+}
+
+/**
+ * Helper to get due date warning text if due date is out of range
+ *
+ * @param {object} gradePeriodField
+ */
+function sCommonDateDueDateWarningText(gradePeriodField) {
+  var gradingPeriodId = parseInt(gradePeriodField.val());
+  var gradingPeriodDates = Drupal.settings.grading_period_dates[gradingPeriodId];
+  var gradingPeriodName = gradePeriodField.text();
+  var startDate = sCommonDateFormatToString(new Date(gradingPeriodDates['start']));
+  var endDate = sCommonDateFormatToString(new Date(gradingPeriodDates['end']));
+  return Drupal.t('The due date falls outside the selected grading period: @gradingPeriodName: @startDate to @endDate',
+    {
+      '@gradingPeriodName': gradingPeriodName,
+      '@startDate': startDate,
+      '@endDate': endDate,
+    });
+}
+
+/**
+ * Add due date warning to form
+ *
+ * @param {string} warningText
+ * @param {object} siblingElement
+ * @param {object} form
+ */
+function sCommonDateAddDueDateWarning(warningText, siblingElement, form) {
+  sCommonDateRemoveDueDateWarning(form);
+  // SVG Comes from Backpack.
+  var icon = '<svg class="due-date-warning-icon" viewBox="0 0 23 22" width="100%" height="100%">' +
+    '<g fill="#fac901" fill-rule="evenodd">' +
+    '<path stroke="#333" d="M9.636 2.006c.975-1.814 2.751-1.815 3.727 0l8.665 16.111c.967 1.798.02 3.383-2.027 3.383H2.998C.957 21.5.004 19.914.971 18.117L9.636 2.006z"></path>' +
+    '<path fill="#333" fill-rule="nonzero" d="M10.748 13.66l-.219-3.275a24.374 24.374 0 0 1-.061-1.374c0-.379.099-.674.297-.886.198-.211.46-.317.783-.317.392 0 .654.135.786.406.132.272.198.662.198 1.173 0 .3-.016.606-.048.916l-.294 3.37c-.031.4-.1.709-.205.923a.537.537 0 0 1-.52.321c-.245 0-.416-.104-.512-.311-.096-.207-.164-.523-.205-.947zm.759 4.497c-.278 0-.52-.09-.728-.27-.208-.18-.311-.432-.311-.755 0-.283.099-.523.297-.721a.99.99 0 0 1 .728-.298c.287 0 .532.1.735.298a.971.971 0 0 1 .304.72c0 .32-.102.57-.307.753a1.047 1.047 0 0 1-.718.273z"></path>' +
+    '</g>' +
+    '</svg>';
+  var output = '<div class="form-item due-date-warning-wrapper">' +
+    '<div>' + icon + '</div>' +
+    '<div class="due-date-warning-text">' + warningText + '</div>' +
+    '</div>';
+  siblingElement.after(output);
+}
+
+/**
+ * Remove due date warning
+ * @param {object} form
+ */
+function sCommonDateRemoveDueDateWarning(form) {
+  $(".due-date-warning-wrapper", form).remove();
+}
