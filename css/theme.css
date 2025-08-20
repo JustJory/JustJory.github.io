@@ -352,3 +352,12 @@ a.h1button:active {
 	overflow: hidden;
 	font-size: 80%;
 }
+.embedText {
+	padding: 0px;
+	margin: 2px auto 0px auto;
+	width: 170px;
+	position: relative;
+	color: #333333;
+	overflow: hidden;
+	font-size: 100%;
+}
