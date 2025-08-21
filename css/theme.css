@@ -13,6 +13,7 @@
 	font-variant: normal;
 	text-transform: none;
 	text-decoration: none;
+	background-attachment: fixed;
 }
 /* Container's */
 #banner {
