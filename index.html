@@ -1,57 +1,10 @@
 ---
 ---
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-
-<head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
-
-<title>Jory's Website</title>
-
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-
-
-<!-- CSS FILES -->
-<link href="css/theme.css" rel="stylesheet" type="text/css" />
-
-
-</head>
-
-<body>
-<div id="header">
-	<div id="banner">
-		<div id="banner-img">
-			<div id="logo">
-				<img alt="Jory's Website" height="75" src="theme/logo.png" width="280" style="border:0px"/>
-			</div>
-		</div>
-	
-		<div id="h-navBox">
-			<div id="hz-menu">
-				<ul>
-					<li><a class="h1button" href="/">Home</a></li>
-					<li><a class="h1button" href="/about/">About</a></li>
-					<li><a class="h1button" href="/projects/">Projects</a></li>
-					<li><a class="h1button" href="/blog/">Blog</a></li>
-					<li><a class="h1button" href="/links/">Links</a></li>
-					<li><a class="h1button" href="/games/">Games</a></li>
-					<li><a class="h1button" href="/other/">Other</a></li>
-				</ul>
-			</div>
-		</div>
-
-	</div>
-
-</div>
-
-
+{% include header.htm %}
 
 <div id="wrapper">
 <!-- OVERLAID IMAGES GO HERE -->
-	<div style="position:absolute; top:-5px; left:185px; z-index:9999;"><img src="images/star.png" alt="Star"></div>
+	{% include overlaidimgs.htm %}
 
 {% include sidebar.htm %}
 
@@ -60,11 +13,11 @@
 
 
 	<div class="cnt-box">
-		<div class="cnt-boxTop">Welcome to my website!</div>
+		<div class="cnt-boxTop">Welcome to my uhh website</div>
 		<div class="cnt-boxFiller">
 			<div class="cnt-boxInfo">
 				
-				<p align="left"><img style="float:right" alt="look at him :D" src="images/jory.png" width="200" style="border:0px" />Welcome to my website! This is my website where you can find all of my cool projects, and other various things. I am unfunnyjory, you can read more about me: here. <br><br> This website will be used for, honestly idk atp, I just started making it yesterday as of me typing this LOL. I'll most likely post stuff about my life here and post some projects/programs ive made. I'll put old stuff and new stuff and even a bear on this website.</p>
+				<p align="left"><img style="float:right" alt="look at him :D" src="assets/images/jory.png" width="200" style="border:0px" />Welcome to Jorys fucking awesome website!!?! This is my website where you can find all of my cool projects, and other various things. I am Just Jory or also unfunnyjory, you can read more about me: hereee.... <br><br> This website will be used for.... STUFF!!! Videos, Pictures, all the media all right here indeed. I'll most likely post stuff about my life here and post some projects/programs ive made. I'll put old stuff and new stuff and even a bear on this website.</p>
 				<div class="clearR"></div>
 
 			</div>
@@ -101,19 +54,7 @@
 	</div>
 
 </div>
-<div class="clearB"></div>
-</div>
-
-<div id="footer">
-
-	<div id="foot-notes">
-		justjory.github.io<br/>
-		Created 2024-2025<br/><br/>
-		Best Viewed at 1024x768
-	</div>	
-
-</div>
-
+{% include footer.htm %}
 </body>
 </html>
 
