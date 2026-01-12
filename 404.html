@@ -1,57 +1,11 @@
 ---
 ---
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-
-<head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
-
-<title>Jory's Website</title>
-
-<meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-
-
-<!-- CSS FILES -->
-<link href="/css/theme.css" rel="stylesheet" type="text/css" />
-
-
-</head>
-
-<body>
-<div id="header">
-	<div id="banner">
-		<div id="banner-img">
-			<div id="logo">
-				<img alt="Jory's Website" height="75" src="/theme/logo.png" width="280" style="border:0px"/>
-			</div>
-		</div>
-	
-		<div id="h-navBox">
-			<div id="hz-menu">
-				<ul>
-					<li><a class="h1button" href="/">Home</a></li>
-					<li><a class="h1button" href="/about/">About</a></li>
-					<li><a class="h1button" href="/projects/">Projects</a></li>
-					<li><a class="h1button" href="/blog/">Blog</a></li>
-					<li><a class="h1button" href="/links/">Links</a></li>
-					<li><a class="h1button" href="/games/">Games</a></li>
-					<li><a class="h1button" href="/other/">Other</a></li>
-				</ul>
-			</div>
-		</div>
-
-	</div>
-
-</div>
-
+{% include header.htm %}
 
 
 <div id="wrapper">
 <!-- OVERLAID IMAGES GO HERE -->
-	<div style="position:absolute; top:-5px; left:185px; z-index:9999;"><img src="/images/star.png" alt="Star"></div>
+	{% include overlaidimgs.htm %}
 
 {% include sidebar.htm %}
 
@@ -63,7 +17,7 @@
 		<div class="cnt-boxTop">404 NOT FOUND</div>
 		<div class="cnt-boxFiller">
 			<div class="cnt-boxInfo">
-				<p align="left"><img style="float:right; border:0px;" alt="warn" src="/images/warn.png" width="160" />This webpage either does not exist, or is under construction. Go back to <a href="https://justjory.github.io">home</a></p>
+				<p align="left"><img style="float:right; border:0px;" alt="warn" src="/assets/images/warn.png" width="160" />This webpage either does not exist, or is under construction. Go back to <a href="https://justjory.github.io">home</a></p>
 				<div class="clearR"></div>
 
 			</div>
@@ -73,19 +27,5 @@
 	</div>
 
 </div>
-<div class="clearB"></div>
-</div>
-
-<div id="footer">
-
-	<div id="foot-notes">
-		justjory.github.io<br/>
-		Created 2024-2025<br/><br/>
-		Best Viewed at 1024x768
-	</div>	
-
-</div>
-
-</body>
-</html>
+{% include footer.htm %}
 
