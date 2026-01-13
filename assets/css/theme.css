@@ -87,6 +87,7 @@
 	clear: left;
 }
 #hz-menu ul {
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
 	padding: 0px;
 	margin: 0px;
 	list-style-type: none;
@@ -196,6 +197,7 @@ a.h1button:active {
 }
 .v-boxTop {
 	padding: 0px;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
 	margin: 0px;
 	height: 64px;
 	width: 218px;
